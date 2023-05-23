@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
-const LoginPage = () => {
+const LoginPage = ({ rerun }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -16,16 +15,15 @@ const LoginPage = () => {
                 {
                     email,
                     password,
+                },
+                {
+                    withCredentials: true, // Include cookies in the request
                 }
             );
-            const token = response.token;
-            // localStorage.setItem("token", response.data.token);
-            document.cookie = `token=${token}; path=/; secure; HttpOnly`;
-
-            navigate("/main");
+            rerun();
         } catch (error) {
             // Handle error
-            console.log(error.response.data);
+            console.log(error);
         }
     };
 

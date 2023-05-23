@@ -9,22 +9,26 @@ const signUp = async (req, res) => {
 };
 
 const login = async (req, res) => {
-    const { email, password } = req.body;
+    try {
+        const { email, password } = req.body;
 
-    const user = { email };
+        const userId = "exampleUserId";
 
-    const token = jwt.sign({ userId: user.id }, "your-secret-key", {
-        expiresIn: "1h",
-    });
+        const token = jwt.sign({ userId }, "your-secret-key", {
+            expiresIn: "1h",
+        });
 
-    // Set the HTTP-only cookie
-    res.cookie("token", token, {
-        maxAge: 3600000, // 1 hour in milliseconds
-        httpOnly: true,
-        secure: false, // Set this to true if using HTTPS
-    });
+        // Set the HTTP-only cookie
+        res.cookie("token", token, {
+            maxAge: 3600000, // 1 hour in milliseconds
+            httpOnly: true,
+            secure: false, // Set this to true if using HTTPS
+        });
 
-    res.json({ message: "Login successful", token });
+        res.status(200).json({ message: "Login successful" });
+    } catch (error) {
+        console.log(error);
+    }
 };
 
 module.exports = {
