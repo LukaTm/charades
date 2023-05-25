@@ -113,6 +113,9 @@ const login = async (req, res) => {
 //     }
 // };
 
+// Retrieve the existing array to compare against
+let existingArray = [];
+
 const getWords = async (req, res) => {
     let category = req.query.category;
     const numWords = req.query.numWords;
@@ -143,9 +146,6 @@ const getWords = async (req, res) => {
             return res.status(400).json({ message: "Invalid category" });
         }
 
-        // Retrieve the existing array to compare against
-        const existingArray = ["existing1", "existing2"];
-
         // Select random values from the array, excluding existing values
         const numRandomValues = numWords;
 
@@ -156,28 +156,47 @@ const getWords = async (req, res) => {
                 return array;
             }
 
+            // Filter Duplicates
             const availableValues = array.filter(
                 (value) =>
                     !existingValues.includes(value) &&
-                    !uniqueValues.includes(value)
+                    !uniqueValues
+                        // convert to Lower case to compare them
+                        .map((val) => val.toLowerCase())
+                        .includes(value.toLowerCase())
             );
 
             for (let i = 0; i < numValues; i++) {
                 const randomIndex = Math.floor(
                     Math.random() * availableValues.length
                 );
-                uniqueValues.push(availableValues[randomIndex]);
-                availableValues.splice(randomIndex, 1);
+                if (availableValues[randomIndex] !== undefined) {
+                    uniqueValues.push(availableValues[randomIndex]);
+                    existingArray.push(availableValues[randomIndex]);
+                    availableValues.splice(randomIndex, 1);
+                }
             }
 
+            if (uniqueValues.length < 1) {
+                return null;
+            }
             return uniqueValues;
         }
 
-        const charadesWords = await getRandomUniqueValues(
+        let charadesWords;
+        charadesWords = await getRandomUniqueValues(
             selectedArray,
             numRandomValues,
             existingArray
         );
+        if (charadesWords === null) {
+            existingArray.length = 0;
+            charadesWords = await getRandomUniqueValues(
+                selectedArray,
+                numRandomValues,
+                existingArray
+            );
+        }
 
         res.status(201).json({ charadesWords });
     } catch (err) {
