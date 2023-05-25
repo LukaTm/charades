@@ -91,27 +91,27 @@ const login = async (req, res) => {
     }
 };
 
-const createNewWord = async (req, res) => {
-    const enteredName = req.params.enteredName;
-    const userId = req.userId;
+// const createNewWord = async (req, res) => {
+//     const enteredName = req.params.enteredName;
+//     const userId = req.userId;
 
-    try {
-        const customName = new CustomName({
-            content: enteredName,
-            creator: userId,
-            viewers: userId,
-        });
+//     try {
+//         const customName = new CustomName({
+//             content: enteredName,
+//             creator: userId,
+//             viewers: userId,
+//         });
 
-        await customName.save();
+//         await customName.save();
 
-        const findUser = await User.findById(userId);
-        findUser.posts.push(post);
+//         const findUser = await User.findById(userId);
+//         findUser.posts.push(post);
 
-        await findUser.save();
-    } catch (error) {
-        console.log(error);
-    }
-};
+//         await findUser.save();
+//     } catch (error) {
+//         console.log(error);
+//     }
+// };
 
 const getWords = async (req, res) => {
     let category = req.query.category;
@@ -152,31 +152,32 @@ const getWords = async (req, res) => {
         async function getRandomUniqueValues(array, numValues, existingValues) {
             const uniqueValues = [];
 
-            while (uniqueValues.length < numValues) {
-                const randomValue =
-                    array[Math.floor(Math.random() * array.length)];
+            if (array.length <= numValues) {
+                return array;
+            }
 
-                if (
-                    !existingValues.includes(randomValue) &&
-                    !uniqueValues.includes(randomValue)
-                ) {
-                    uniqueValues.push(randomValue);
-                }
+            const availableValues = array.filter(
+                (value) =>
+                    !existingValues.includes(value) &&
+                    !uniqueValues.includes(value)
+            );
+
+            for (let i = 0; i < numValues; i++) {
+                const randomIndex = Math.floor(
+                    Math.random() * availableValues.length
+                );
+                uniqueValues.push(availableValues[randomIndex]);
+                availableValues.splice(randomIndex, 1);
             }
 
             return uniqueValues;
         }
 
-        async function main() {
-            const randomValues = await getRandomUniqueValues(
-                selectedArray,
-                numRandomValues,
-                existingArray
-            );
-            return randomValues;
-        }
-
-        const charadesWords = await main();
+        const charadesWords = await getRandomUniqueValues(
+            selectedArray,
+            numRandomValues,
+            existingArray
+        );
 
         res.status(201).json({ charadesWords });
     } catch (err) {
