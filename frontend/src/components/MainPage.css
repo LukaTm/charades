@@ -1,0 +1,44 @@
+.main-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.num-words {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+}
+
+.num-words button {
+    margin: 0 5px;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.category label {
+    margin-right: 5px;
+}
+
+.word-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.word-list span {
+    display: inline-block;
+    margin: 5px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f2f2f2;
+}

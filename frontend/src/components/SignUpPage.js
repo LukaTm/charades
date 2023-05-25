@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const SignUpPage = () => {
+const SignUpPage = ({ rerun }) => {
     const [nickname, setNickname] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -27,8 +27,7 @@ const SignUpPage = () => {
                 }
             );
 
-            console.log(response.data);
-            navigate("/main"); // Redirect
+            navigate("/login"); // Redirect
         } catch (error) {
             // Handle error
             console.log(error.response.data);

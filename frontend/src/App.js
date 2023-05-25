@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./components/LoginPage";
 import MainPage from "./components/MainPage";
+import SignUpPage from "./components/SignUpPage";
 
 import { useCookies } from "react-cookie";
 import axios from "axios";
@@ -65,6 +66,12 @@ const App = () => {
                 path="/main"
                 element={
                     isAuthenticated ? <MainPage /> : <Navigate to="/login" />
+                }
+            />
+            <Route
+                path="/signup"
+                element={
+                    isAuthenticated ? <Navigate to="/main" /> : <SignUpPage />
                 }
             />
         </Routes>
