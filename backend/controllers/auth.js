@@ -205,8 +205,19 @@ const getWords = async (req, res) => {
     }
 };
 
+const logout = async (req, res) => {
+    try {
+        res.clearCookie("token");
+        res.status(200).json({ message: "Logout successful" });
+    } catch (error) {
+        console.error(err);
+        res.status(500).json({ message: "Failed to log out" });
+    }
+};
+
 module.exports = {
     signUp,
     login,
+    logout,
     getWords,
 };

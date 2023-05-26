@@ -65,7 +65,11 @@ const App = () => {
             <Route
                 path="/main"
                 element={
-                    isAuthenticated ? <MainPage /> : <Navigate to="/login" />
+                    isAuthenticated ? (
+                        <MainPage rerun={() => SetTheRerun()} />
+                    ) : (
+                        <Navigate to="/login" />
+                    )
                 }
             />
             <Route

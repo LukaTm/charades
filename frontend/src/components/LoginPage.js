@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import "./LoginPage.css";
 
 const LoginPage = ({ rerun }) => {
     const [email, setEmail] = useState("");
@@ -28,15 +29,16 @@ const LoginPage = ({ rerun }) => {
     };
 
     return (
-        <div>
-            <h1>Login</h1>
-            <form onSubmit={handleLogin}>
+        <div className="login-container">
+            <h1 className="login-title">Login</h1>
+            <form onSubmit={handleLogin} className="login-form">
                 <input
                     type="email"
                     placeholder="Email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
+                    className="login-input"
                 />
                 <input
                     type="password"
@@ -44,11 +46,17 @@ const LoginPage = ({ rerun }) => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
+                    className="login-input"
                 />
-                <button type="submit">Log In</button>
+                <button type="submit" className="login-button">
+                    Log In
+                </button>
             </form>
-            <p>
-                Don't have an account? <Link to="/signup">Sign up</Link>
+            <p className="login-signup">
+                Don't have an account?{" "}
+                <Link to="/signup" className="signup-link">
+                    Sign up
+                </Link>
             </p>
         </div>
     );

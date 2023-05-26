@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import "./SignUpPage.css";
 
 const SignUpPage = ({ rerun }) => {
     const [nickname, setNickname] = useState("");
@@ -35,15 +36,16 @@ const SignUpPage = ({ rerun }) => {
     };
 
     return (
-        <div>
-            <h1>Sign Up</h1>
-            <form onSubmit={handleSignUp}>
+        <div className="login-container">
+            <h1 className="login-title">Sign Up</h1>
+            <form onSubmit={handleSignUp} className="login-form">
                 <input
                     type="text"
                     placeholder="Nickname"
                     value={nickname}
                     onChange={(e) => setNickname(e.target.value)}
                     required
+                    className="login-input"
                 />
                 <input
                     type="email"
@@ -51,6 +53,7 @@ const SignUpPage = ({ rerun }) => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
+                    className="login-input"
                 />
                 <input
                     type="password"
@@ -58,6 +61,7 @@ const SignUpPage = ({ rerun }) => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
+                    className="login-input"
                 />
                 <input
                     type="password"
@@ -65,11 +69,17 @@ const SignUpPage = ({ rerun }) => {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required
+                    className="login-input"
                 />
-                <button type="submit">Sign Up</button>
+                <button type="submit" className="login-button">
+                    Sign Up
+                </button>
             </form>
-            <p>
-                Already have an account? <Link to="/login">Log in</Link>
+            <p className="login-signup">
+                Already have an account?{" "}
+                <Link to="/login" className="signup-link">
+                    Log in
+                </Link>
             </p>
         </div>
     );

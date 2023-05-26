@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "./MainPage.css";
 
-const MainPage = () => {
+const MainPage = ({ rerun }) => {
     const [numWords, setNumWords] = useState(1);
     const [category, setCategory] = useState("Easy");
     const [words, setWords] = useState([]);
@@ -104,8 +104,29 @@ const MainPage = () => {
         }
     };
 
+    const handleLogout = async () => {
+        try {
+            const response = await axios.post(
+                `http://localhost:8080/api/logout`,
+                {},
+                {
+                    withCredentials: true, // Include cookies in the request
+                }
+            );
+            rerun();
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     return (
         <div className="main-page">
+            <header className="header">
+                <h1>My App</h1>
+                <button className="logout-btn" onClick={handleLogout}>
+                    Logout
+                </button>
+            </header>
             <div className="controls">
                 <div className="num-words">
                     <button
@@ -142,11 +163,15 @@ const MainPage = () => {
                         <option value="Hard">Hard</option>
                     </select>
                 </div>
-                <button onClick={handleGenerateClick}>Generate</button>
+                <button className="generate-btn" onClick={handleGenerateClick}>
+                    Generate
+                </button>
             </div>
             <div className="word-list">
                 {words.map((word, index) => (
-                    <span key={index}>{word}</span>
+                    <span className="word-item" key={index}>
+                        {word}
+                    </span>
                 ))}
             </div>
         </div>
