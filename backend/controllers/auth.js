@@ -9,7 +9,11 @@ const CustomName = require("../models/CustomName");
 const CharadesWords = require("../models/Charades-words");
 
 const signUp = async (req, res) => {
-    const { nickname, email, password } = req.body;
+    const {
+        nicknameValue: nickname,
+        emailValue: email,
+        passwordValue: password,
+    } = req.body;
 
     try {
         // VALIDATE request

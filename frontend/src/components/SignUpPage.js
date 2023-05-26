@@ -8,7 +8,11 @@ const SignUpPage = ({ rerun }) => {
     const navigate = useNavigate();
 
     const isNotEmpty = (value) => value.trim() !== "";
-    const isEmail = (value) => value.includes("@");
+    const isEmail = (value) => {
+        const atIndex = value.indexOf("@");
+        // check if @ exists and IF its not FIRST or LAST index
+        return value.includes("@") && atIndex > 0 && atIndex < value.length - 1;
+    };
     const isPassword = (value) => {
         // Minimum length requirement
         if (value.length < 8) {
