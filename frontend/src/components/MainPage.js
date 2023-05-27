@@ -5,6 +5,7 @@ import "./MainPage.css";
 const MainPage = ({ rerun }) => {
     const [numWords, setNumWords] = useState(1);
     const [category, setCategory] = useState("Easy");
+    const [language, setLanguage] = useState("English");
     const [words, setWords] = useState([]);
 
     const [isHolding, setIsHolding] = useState(false);
@@ -93,10 +94,14 @@ const MainPage = ({ rerun }) => {
         setCategory(event.target.value);
     };
 
+    const handleLanguageChange = (event) => {
+        setLanguage(event.target.value);
+    };
+
     const handleGenerateClick = async () => {
         try {
             const response = await axios.get(
-                `http://localhost:8080/api/words?numWords=${numWords}&category=${category}`
+                `http://localhost:8080/api/words?numWords=${numWords}&category=${category}&language=${language}`
             );
             setWords(response.data.charadesWords);
         } catch (error) {
@@ -151,7 +156,18 @@ const MainPage = ({ rerun }) => {
                         +
                     </button>
                 </div>
-                <div className="category">
+                <div className="select-drop-down">
+                    <select
+                        id="language"
+                        value={language}
+                        onChange={handleLanguageChange}
+                    >
+                        <option value="English">English</option>
+                        <option value="Russian">Russian</option>
+                        <option value="Latvian">Latvian</option>
+                    </select>
+                </div>
+                <div className="select-drop-down">
                     <label htmlFor="category">Category:</label>
                     <select
                         id="category"

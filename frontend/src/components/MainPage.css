@@ -43,15 +43,15 @@
     font-weight: bold;
 }
 
-.category {
+.select-drop-down {
     margin-right: 20px;
 }
 
-.category label {
+.select-drop-down label {
     margin-right: 10px;
 }
 
-.category select {
+.select-drop-down select {
     padding: 5px 10px;
     font-size: 16px;
     border-radius: 4px;
@@ -59,7 +59,7 @@
     transition: border-color 0.3s ease;
 }
 
-.category select:hover {
+.select-drop-down select:hover {
     border-color: #999;
 }
 

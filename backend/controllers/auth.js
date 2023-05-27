@@ -7,6 +7,8 @@ require("dotenv").config();
 const User = require("../models/User");
 const CustomName = require("../models/CustomName");
 const CharadesWords = require("../models/Charades-words");
+const CharadesWordsLatvians = require("../models/Charades-words-latvians");
+const CharadesWordsRussians = require("../models/Charades-words-russians");
 
 const signUp = async (req, res) => {
     const {
@@ -123,16 +125,35 @@ let existingArray = [];
 const getWords = async (req, res) => {
     let category = req.query.category;
     const numWords = req.query.numWords;
+    let language = req.query.language;
     const userId = req.userId;
 
     // Convert to lowercase
     if (category) {
         category = category.toLowerCase();
     }
+    if (language) {
+        language = language.toLowerCase();
+    }
 
     try {
         // Retrieve the collection
-        const AllWords = CharadesWords;
+        let AllWords;
+
+        // Retrieve the collection based on language
+        switch (language) {
+            case "english":
+                AllWords = CharadesWords;
+                break;
+            case "russian":
+                AllWords = CharadesWordsRussians;
+                break;
+            case "latvian":
+                AllWords = CharadesWordsLatvians;
+                break;
+            default:
+                throw new Error("Invalid language");
+        }
 
         // Find the document containing allWords
         const document = await AllWords.findOne();
