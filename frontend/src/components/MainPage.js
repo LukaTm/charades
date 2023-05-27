@@ -127,35 +127,17 @@ const MainPage = ({ rerun }) => {
     return (
         <div className="main-page">
             <header className="header">
-                <h1>My App</h1>
-                <button className="logout-btn" onClick={handleLogout}>
-                    Logout
-                </button>
-            </header>
-            <div className="controls">
-                <div className="num-words">
-                    <button
-                        onMouseDown={() => handleMouseDown("-")}
-                        onMouseUp={handleMouseUp}
-                        onMouseLeave={handleMouseUp}
-                        onClick={() => handleNumWordsSingleClick(-1)}
-                    >
-                        -
-                    </button>
-                    <span>{numWords}</span>
-                    <button
-                        onMouseDown={() => handleMouseDown("+")}
-                        onMouseUp={handleMouseUp}
-                        onClick={() => handleNumWordsSingleClick(1)}
-                        onMouseLeave={handleMouseUp}
-                        onContextMenuCapture={(e) => {
-                            e.preventDefault();
-                            return false;
-                        }}
-                    >
-                        +
+                <div className="h1-container">
+                    <h1>Charades</h1>
+                </div>
+
+                <div className="header-btn-container">
+                    <button className="logout-btn" onClick={handleLogout}>
+                        Logout
                     </button>
                 </div>
+            </header>
+            <div className="controls">
                 <div className="select-drop-down">
                     <select
                         id="language"
@@ -178,6 +160,31 @@ const MainPage = ({ rerun }) => {
                         <option value="Medium">Medium</option>
                         <option value="Hard">Hard</option>
                     </select>
+                </div>
+                <div className="num-words">
+                    <button
+                        onMouseDown={() => handleMouseDown("-")}
+                        onMouseUp={handleMouseUp}
+                        onMouseLeave={handleMouseUp}
+                        onClick={() => handleNumWordsSingleClick(-1)}
+                    >
+                        -
+                    </button>
+                    <div className="num-words-container">
+                        <span>{numWords}</span>
+                    </div>
+                    <button
+                        onMouseDown={() => handleMouseDown("+")}
+                        onMouseUp={handleMouseUp}
+                        onClick={() => handleNumWordsSingleClick(1)}
+                        onMouseLeave={handleMouseUp}
+                        onContextMenuCapture={(e) => {
+                            e.preventDefault();
+                            return false;
+                        }}
+                    >
+                        +
+                    </button>
                 </div>
                 <button className="generate-btn" onClick={handleGenerateClick}>
                     Generate
