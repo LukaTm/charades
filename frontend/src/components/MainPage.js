@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "./MainPage.css";
 
+import { useLocation } from "react-router-dom";
+
 const MainPage = ({ rerun }) => {
     const [numWords, setNumWords] = useState(1);
     const [category, setCategory] = useState("Easy");
@@ -12,6 +14,28 @@ const MainPage = ({ rerun }) => {
     const [operation, setOperation] = useState(null);
 
     const isFirstClick = useRef(true); // Ref to track the first click
+
+    // info about the current URL
+    const location = useLocation();
+    // allows you to manipulate and work with query parameters in a URL
+    const searchParams = new URLSearchParams(location.search);
+    const lang = searchParams.get("lang");
+
+    useEffect(() => {
+        switch (lang) {
+            case "eng":
+                setLanguage("English");
+                break;
+            case "rus":
+                setLanguage("Russian");
+                break;
+            case "lv":
+                setLanguage("Latvian");
+                break;
+            default:
+                setLanguage("English");
+        }
+    }, [lang]);
 
     useEffect(() => {
         let timeoutId;
@@ -128,7 +152,15 @@ const MainPage = ({ rerun }) => {
         <div className="main-page">
             <header className="header">
                 <div className="h1-container">
-                    <h1>Charades</h1>
+                    <h1>
+                        {lang === "eng"
+                            ? "Charades"
+                            : lang === "rus"
+                            ? "Шарады"
+                            : language === "lv"
+                            ? "Mēmais šovs"
+                            : null}
+                    </h1>
                 </div>
 
                 <div className="header-btn-container">
@@ -150,7 +182,15 @@ const MainPage = ({ rerun }) => {
                     </select>
                 </div>
                 <div className="select-drop-down">
-                    <label htmlFor="category">Category:</label>
+                    <label htmlFor="category">
+                        {language === "English"
+                            ? "Difficulty:"
+                            : language === "Russian"
+                            ? "Сложность:"
+                            : language === "Latvian"
+                            ? "Grūtība:"
+                            : null}
+                    </label>
                     <select
                         id="category"
                         value={category}
@@ -187,7 +227,7 @@ const MainPage = ({ rerun }) => {
                     </button>
                 </div>
                 <button className="generate-btn" onClick={handleGenerateClick}>
-                    Generate
+                    Submit
                 </button>
             </div>
             <div className="word-list">

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import LoginPage from "./components/LoginPage";
 import MainPage from "./components/MainPage";
 import SignUpPage from "./components/SignUpPage";
@@ -40,23 +40,32 @@ const App = () => {
         checkAuthStatus();
     }, [cookies, rerun]);
 
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    let lang = searchParams.get("lang");
+    console.log(lang);
+
+    const defaultLang = "eng";
+
     return (
         <Routes>
             <Route
                 path="/"
                 element={
                     isAuthenticated ? (
-                        <Navigate to="/main" />
+                        // replace CAN'T navigate back to previous page
+                        <Navigate to={`/main?lang=${lang}`} replace={true} />
                     ) : (
-                        <Navigate to="/login" />
+                        <Navigate to="/login" replace={true} />
                     )
                 }
             />
+
             <Route
                 path="/login"
                 element={
                     isAuthenticated ? (
-                        <Navigate to="/main" />
+                        <Navigate to={`/main?lang=${lang}`} replace={true} />
                     ) : (
                         <LoginPage rerun={() => SetTheRerun()} />
                     )
@@ -68,14 +77,19 @@ const App = () => {
                     isAuthenticated ? (
                         <MainPage rerun={() => SetTheRerun()} />
                     ) : (
-                        <Navigate to="/login" />
+                        <Navigate to="/login" replace={true} />
                     )
                 }
             />
+
             <Route
                 path="/signup"
                 element={
-                    isAuthenticated ? <Navigate to="/main" /> : <SignUpPage />
+                    isAuthenticated ? (
+                        <Navigate to={`/main?lang=${lang}`} replace={true} />
+                    ) : (
+                        <SignUpPage />
+                    )
                 }
             />
         </Routes>
