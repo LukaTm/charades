@@ -3,9 +3,10 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import "./LoginPage.css";
 
-const LoginPage = ({ rerun }) => {
+const LoginPage = ({ rerun, logInWithoutAccount, handleLoginFalse }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const currentURL = window.location.href;
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -21,6 +22,8 @@ const LoginPage = ({ rerun }) => {
                     withCredentials: true, // Include cookies in the request
                 }
             );
+            handleLoginFalse();
+            localStorage.removeItem("guestAccount");
             rerun();
         } catch (error) {
             // Handle error
@@ -29,11 +32,20 @@ const LoginPage = ({ rerun }) => {
     };
 
     const handleContinueWithoutLogin = () => {
-        // Implement logic for continuing without login
+        logInWithoutAccount();
+        handleLoginFalse?.();
     };
 
     return (
-        <div className="login-container">
+        <div className={`login-container `}>
+            <div
+                className={
+                    currentURL === "http://localhost:3000/login"
+                        ? ""
+                        : "close-button"
+                }
+                onClick={handleLoginFalse}
+            ></div>
             <h1 className="login-title">Login</h1>
             <form onSubmit={handleLogin} className="login-form">
                 <input

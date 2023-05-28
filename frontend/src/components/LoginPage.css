@@ -1,6 +1,8 @@
 .login-container {
     height: 10px;
-    width: 35vw;
+    width: calc(100vw - 200px);
+    max-width: 550px;
+    min-width: 340px;
     background-color: #f1f1f1;
     border-radius: 5px;
     position: absolute;
@@ -8,7 +10,29 @@
     left: 50%;
     height: calc(100vh - 500px) !important;
     transform: translate(-50%, -50%);
-    height: 100px;
+}
+
+.close-button::before {
+    position: absolute;
+    content: "";
+    height: 30px;
+    width: 4px;
+    background-color: rgb(5, 5, 5);
+    transform: rotate(45deg);
+    top: 9px;
+    right: 24px;
+    cursor: pointer;
+}
+.close-button::after {
+    position: absolute;
+    content: "";
+    height: 30px;
+    width: 4px;
+    background-color: black;
+    transform: rotate(-45deg);
+    top: 9px;
+    right: 24px;
+    cursor: pointer;
 }
 
 .login-title {
@@ -70,3 +94,9 @@
 .continue-without-login-button:hover {
     background-color: #ec6c6c;
 }
+
+/* @media (max-width: 595px) {
+    .login-container {
+
+    }
+} */

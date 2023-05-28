@@ -6,27 +6,17 @@ import LoginPage from "./LoginPage";
 
 import { useLocation } from "react-router-dom";
 
-const GetCookieValue = (cookieName) => {
-    const cookieString = document.cookie;
-    const cookies = cookieString.split(";");
-
-    for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i].trim();
-        // Check if the cookie starts with the desired name
-        if (cookie.startsWith(cookieName + "=")) {
-            // Get the cookie value by removing the cookie name and equals sign
-            return cookie.substring(cookieName.length + 1);
-        }
-    }
-    return null;
-};
-
-const MainPage = ({ rerun }) => {
+const MainPage = ({
+    rerun,
+    isAuthenticated,
+    logInWithoutAccount,
+    setIsAuthenticated,
+    setRemoveGuestUser,
+}) => {
     const [numWords, setNumWords] = useState(1);
     const [category, setCategory] = useState("Easy");
     const [language, setLanguage] = useState("English");
     const [words, setWords] = useState([]);
-    const [IsloggedIn, setIsLoggedIn] = useState(false);
     const [loginModal, setLoginModal] = useState(false);
 
     const [isHolding, setIsHolding] = useState(false);
@@ -55,16 +45,6 @@ const MainPage = ({ rerun }) => {
                 setLanguage("English");
         }
     }, [lang]);
-
-    useEffect(() => {
-        // VALIDATE IT
-        const token = GetCookieValue("token");
-        if (token) {
-            setIsLoggedIn(true);
-        } else {
-            setIsLoggedIn(false);
-        }
-    }, []);
 
     useEffect(() => {
         let timeoutId;
@@ -171,13 +151,20 @@ const MainPage = ({ rerun }) => {
                     withCredentials: true, // Include cookies in the request
                 }
             );
-            rerun(lang);
+            // rerun(lang);
+            setIsAuthenticated(false);
+            localStorage.setItem("guestAccount", JSON.stringify(true));
+            rerun();
         } catch (error) {
             console.log(error);
         }
     };
     const handleLogin = () => {
         setLoginModal(true);
+        setRemoveGuestUser(true);
+    };
+    const handleLoginFalse = () => {
+        setLoginModal(false);
     };
 
     return (
@@ -199,7 +186,7 @@ const MainPage = ({ rerun }) => {
                     </div>
 
                     <div className="header-btn-container">
-                        {IsloggedIn ? (
+                        {isAuthenticated ? (
                             <button
                                 className="logout-btn"
                                 onClick={handleLogout}
@@ -309,7 +296,13 @@ const MainPage = ({ rerun }) => {
                     ))}
                 </div>
             </div>
-            {loginModal && <LoginPage />}
+            {loginModal && (
+                <LoginPage
+                    logInWithoutAccount={logInWithoutAccount}
+                    handleLoginFalse={handleLoginFalse}
+                    rerun={rerun}
+                />
+            )}
         </div>
     );
 };

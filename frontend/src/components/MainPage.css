@@ -3,17 +3,6 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #222; /* Set a darker background color for the entire page */
-    height: 100vh; /* Adjust the height as needed */
-}
-
-.modal-background {
-    background-color: rgba(
-        0,
-        0,
-        0,
-        0.5
-    ); /* Set the background color and opacity for the modal */
 }
 
 .controls {
