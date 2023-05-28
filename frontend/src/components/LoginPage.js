@@ -3,7 +3,14 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import "./LoginPage.css";
 
-const LoginPage = ({ rerun, logInWithoutAccount, handleLoginFalse }) => {
+const LoginPage = ({
+    rerun,
+    logInWithoutAccount,
+    handleLoginFalse,
+    signupModalHelper,
+    setSignupModal,
+    setLoginModal,
+}) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const currentURL = window.location.href;
@@ -34,6 +41,11 @@ const LoginPage = ({ rerun, logInWithoutAccount, handleLoginFalse }) => {
     const handleContinueWithoutLogin = () => {
         logInWithoutAccount();
         handleLoginFalse?.();
+    };
+
+    const Signup = () => {
+        setLoginModal(false);
+        setSignupModal(true);
     };
 
     return (
@@ -69,10 +81,24 @@ const LoginPage = ({ rerun, logInWithoutAccount, handleLoginFalse }) => {
                 </button>
             </form>
             <p className="login-signup">
-                Don't have an account?{" "}
-                <Link to="/signup" className="signup-link">
-                    Sign up
-                </Link>
+                {signupModalHelper ? (
+                    <span>
+                        Don't have an account?
+                        <span
+                            className="signup-link custom-link"
+                            onClick={Signup}
+                        >
+                            Sign up
+                        </span>
+                    </span>
+                ) : (
+                    <span>
+                        Don't have an account?
+                        <Link to="/signup" className="signup-link">
+                            Sign up
+                        </Link>
+                    </span>
+                )}
             </p>
             <button
                 className="continue-without-login-button"

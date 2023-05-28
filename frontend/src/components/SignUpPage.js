@@ -4,8 +4,15 @@ import axios from "axios";
 import "./SignUpPage.css";
 import useInput from "../hooks/use-input";
 
-const SignUpPage = ({ rerun }) => {
+const SignUpPage = ({
+    rerun,
+    handleSignupFalse,
+    loginModalHelper,
+    setLoginModal,
+    setSignupModal,
+}) => {
     const navigate = useNavigate();
+    const currentURL = window.location.href;
 
     const isNotEmpty = (value) => value.trim() !== "";
     const isEmail = (value) => {
@@ -95,6 +102,11 @@ const SignUpPage = ({ rerun }) => {
         }
     };
 
+    const Login = () => {
+        setLoginModal(true);
+        setSignupModal(false);
+    };
+
     const nicknameClasses = nicknameHasError
         ? "form-control invalid"
         : "form-control";
@@ -107,6 +119,14 @@ const SignUpPage = ({ rerun }) => {
 
     return (
         <div className="login-container">
+            <div
+                className={
+                    currentURL === "http://localhost:3000/signup"
+                        ? ""
+                        : "close-button"
+                }
+                onClick={handleSignupFalse}
+            ></div>
             <h1 className="login-title">Sign Up</h1>
             <form onSubmit={handleSignUp} className="login-form">
                 <input
@@ -165,10 +185,24 @@ const SignUpPage = ({ rerun }) => {
                 </button>
             </form>
             <p className="login-signup">
-                Already have an account?{" "}
-                <Link to="/login" className="signup-link">
-                    Log in
-                </Link>
+                {loginModalHelper ? (
+                    <span>
+                        Already have an account?
+                        <span
+                            className="signup-link custom-link"
+                            onClick={Login}
+                        >
+                            Log in
+                        </span>
+                    </span>
+                ) : (
+                    <span>
+                        Already have an account?
+                        <Link to="/login" className="signup-link">
+                            Log in
+                        </Link>
+                    </span>
+                )}
             </p>
         </div>
     );

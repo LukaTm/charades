@@ -5,6 +5,7 @@ import "./MainPage.css";
 import LoginPage from "./LoginPage";
 
 import { useLocation } from "react-router-dom";
+import SignUpPage from "./SignUpPage";
 
 const MainPage = ({
     rerun,
@@ -18,6 +19,9 @@ const MainPage = ({
     const [language, setLanguage] = useState("English");
     const [words, setWords] = useState([]);
     const [loginModal, setLoginModal] = useState(false);
+    const [signupModalHelper, setSignupModalHelper] = useState(true);
+    const [signupModal, setSignupModal] = useState(false);
+    const [loginModalHelper, setLoginModalHelper] = useState(true);
 
     const [isHolding, setIsHolding] = useState(false);
     const [operation, setOperation] = useState(null);
@@ -166,6 +170,13 @@ const MainPage = ({
     const handleLoginFalse = () => {
         setLoginModal(false);
     };
+    const handleSignup = () => {
+        setSignupModal(true);
+        setRemoveGuestUser(true);
+    };
+    const handleSignupFalse = () => {
+        setSignupModal(false);
+    };
 
     return (
         <div>
@@ -301,6 +312,19 @@ const MainPage = ({
                     logInWithoutAccount={logInWithoutAccount}
                     handleLoginFalse={handleLoginFalse}
                     rerun={rerun}
+                    signupModalHelper={signupModalHelper}
+                    setSignupModalHelper={setSignupModalHelper}
+                    setSignupModal={setSignupModal}
+                    setLoginModal={setLoginModal}
+                />
+            )}
+            {signupModal && (
+                <SignUpPage
+                    handleSignupFalse={handleSignupFalse}
+                    setLoginModal={setLoginModal}
+                    setLoginModalHelper={setLoginModalHelper}
+                    loginModalHelper={loginModalHelper}
+                    setSignupModal={setSignupModal}
                 />
             )}
         </div>

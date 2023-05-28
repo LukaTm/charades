@@ -35,6 +35,10 @@
     cursor: pointer;
 }
 
+.custom-link {
+    cursor: pointer;
+}
+
 .login-title {
     font-size: 2rem;
     margin-bottom: 1rem;
