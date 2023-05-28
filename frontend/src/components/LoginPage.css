@@ -1,10 +1,14 @@
 .login-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
+    height: 10px;
+    width: 35vw;
     background-color: #f1f1f1;
+    border-radius: 5px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: calc(100vh - 500px) !important;
+    transform: translate(-50%, -50%);
+    height: 100px;
 }
 
 .login-title {

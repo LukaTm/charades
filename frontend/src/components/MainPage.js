@@ -2,13 +2,32 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "./MainPage.css";
 
+import LoginPage from "./LoginPage";
+
 import { useLocation } from "react-router-dom";
+
+const GetCookieValue = (cookieName) => {
+    const cookieString = document.cookie;
+    const cookies = cookieString.split(";");
+
+    for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        // Check if the cookie starts with the desired name
+        if (cookie.startsWith(cookieName + "=")) {
+            // Get the cookie value by removing the cookie name and equals sign
+            return cookie.substring(cookieName.length + 1);
+        }
+    }
+    return null;
+};
 
 const MainPage = ({ rerun }) => {
     const [numWords, setNumWords] = useState(1);
     const [category, setCategory] = useState("Easy");
     const [language, setLanguage] = useState("English");
     const [words, setWords] = useState([]);
+    const [IsloggedIn, setIsLoggedIn] = useState(false);
+    const [loginModal, setLoginModal] = useState(false);
 
     const [isHolding, setIsHolding] = useState(false);
     const [operation, setOperation] = useState(null);
@@ -36,6 +55,16 @@ const MainPage = ({ rerun }) => {
                 setLanguage("English");
         }
     }, [lang]);
+
+    useEffect(() => {
+        // VALIDATE IT
+        const token = GetCookieValue("token");
+        if (token) {
+            setIsLoggedIn(true);
+        } else {
+            setIsLoggedIn(false);
+        }
+    }, []);
 
     useEffect(() => {
         let timeoutId;
@@ -147,120 +176,140 @@ const MainPage = ({ rerun }) => {
             console.log(error);
         }
     };
+    const handleLogin = () => {
+        setLoginModal(true);
+    };
 
     return (
-        <div className="main-page">
-            <header className="header">
-                <div className="h1-container">
-                    <h1>
-                        {language === "English"
-                            ? "Charades"
-                            : language === "Russian"
-                            ? "Шарады"
-                            : language === "Latvian"
-                            ? "Mēmais šovs"
-                            : "Charades"}
-                    </h1>
-                </div>
+        <div>
+            <div
+                className={`main-page ${loginModal ? "modal-background" : ""}`}
+            >
+                <header className="header">
+                    <div className="h1-container">
+                        <h1>
+                            {language === "English"
+                                ? "Charades"
+                                : language === "Russian"
+                                ? "Шарады"
+                                : language === "Latvian"
+                                ? "Mēmais šovs"
+                                : "Charades"}
+                        </h1>
+                    </div>
 
-                <div className="header-btn-container">
-                    <button className="logout-btn" onClick={handleLogout}>
-                        Logout
-                    </button>
-                </div>
-            </header>
-            <div className="controls">
-                <div className="select-drop-down">
-                    <select
-                        id="language"
-                        value={language}
-                        onChange={handleLanguageChange}
-                    >
-                        <option value="English">English</option>
-                        <option value="Russian">Russian</option>
-                        <option value="Latvian">Latvian</option>
-                    </select>
-                </div>
-                <div className="select-drop-down">
-                    <label htmlFor="category">
-                        {language === "English"
-                            ? "Difficulty:"
-                            : language === "Russian"
-                            ? "Сложность:"
-                            : language === "Latvian"
-                            ? "Grūtība:"
-                            : null}
-                    </label>
-                    <select
-                        id="category"
-                        value={category}
-                        onChange={handleCategoryChange}
-                    >
-                        <option value="Easy">
+                    <div className="header-btn-container">
+                        {IsloggedIn ? (
+                            <button
+                                className="logout-btn"
+                                onClick={handleLogout}
+                            >
+                                Logout
+                            </button>
+                        ) : (
+                            <button className="login-btn" onClick={handleLogin}>
+                                Login
+                            </button>
+                        )}
+                    </div>
+                </header>
+                <div className="controls">
+                    <div className="select-drop-down">
+                        <select
+                            id="language"
+                            value={language}
+                            onChange={handleLanguageChange}
+                        >
+                            <option value="English">English</option>
+                            <option value="Russian">Russian</option>
+                            <option value="Latvian">Latvian</option>
+                        </select>
+                    </div>
+                    <div className="select-drop-down">
+                        <label htmlFor="category">
                             {language === "English"
-                                ? "Easy"
+                                ? "Difficulty:"
                                 : language === "Russian"
-                                ? "Легкий"
+                                ? "Сложность:"
                                 : language === "Latvian"
-                                ? "Viegla"
-                                : "Easy"}
-                        </option>
-                        <option value="Medium">
-                            {language === "English"
-                                ? "Medium"
-                                : language === "Russian"
-                                ? "Средний"
-                                : language === "Latvian"
-                                ? "Vidēja"
-                                : "Medium"}
-                        </option>
-                        <option value="Hard">
-                            {language === "English"
-                                ? "Hard"
-                                : language === "Russian"
-                                ? "Трудный"
-                                : language === "Latvian"
-                                ? "Grūta"
-                                : "Hard"}
-                        </option>
-                    </select>
-                </div>
-                <div className="num-words">
-                    <button
-                        onMouseDown={() => handleMouseDown("-")}
-                        onMouseUp={handleMouseUp}
-                        onMouseLeave={handleMouseUp}
-                        onClick={() => handleNumWordsSingleClick(-1)}
-                    >
-                        -
-                    </button>
-                    <div className="num-words-container">
-                        <span>{numWords}</span>
+                                ? "Grūtība:"
+                                : null}
+                        </label>
+                        <select
+                            id="category"
+                            value={category}
+                            onChange={handleCategoryChange}
+                        >
+                            <option value="Easy">
+                                {language === "English"
+                                    ? "Easy"
+                                    : language === "Russian"
+                                    ? "Легкий"
+                                    : language === "Latvian"
+                                    ? "Viegla"
+                                    : "Easy"}
+                            </option>
+                            <option value="Medium">
+                                {language === "English"
+                                    ? "Medium"
+                                    : language === "Russian"
+                                    ? "Средний"
+                                    : language === "Latvian"
+                                    ? "Vidēja"
+                                    : "Medium"}
+                            </option>
+                            <option value="Hard">
+                                {language === "English"
+                                    ? "Hard"
+                                    : language === "Russian"
+                                    ? "Трудный"
+                                    : language === "Latvian"
+                                    ? "Grūta"
+                                    : "Hard"}
+                            </option>
+                        </select>
+                    </div>
+                    <div className="num-words">
+                        <button
+                            onMouseDown={() => handleMouseDown("-")}
+                            onMouseUp={handleMouseUp}
+                            onMouseLeave={handleMouseUp}
+                            onClick={() => handleNumWordsSingleClick(-1)}
+                        >
+                            -
+                        </button>
+                        <div className="num-words-container">
+                            <span>{numWords}</span>
+                        </div>
+                        <button
+                            onMouseDown={() => handleMouseDown("+")}
+                            onMouseUp={handleMouseUp}
+                            onClick={() => handleNumWordsSingleClick(1)}
+                            onMouseLeave={handleMouseUp}
+                            onContextMenuCapture={(e) => {
+                                e.preventDefault();
+                                return false;
+                            }}
+                        >
+                            +
+                        </button>
                     </div>
                     <button
-                        onMouseDown={() => handleMouseDown("+")}
-                        onMouseUp={handleMouseUp}
-                        onClick={() => handleNumWordsSingleClick(1)}
-                        onMouseLeave={handleMouseUp}
-                        onContextMenuCapture={(e) => {
-                            e.preventDefault();
-                            return false;
-                        }}
+                        className="generate-btn"
+                        onClick={handleGenerateClick}
                     >
-                        +
+                        Submit
                     </button>
                 </div>
-                <button className="generate-btn" onClick={handleGenerateClick}>
-                    Submit
-                </button>
+                <div className="word-list">
+                    {words.map((word, index) => (
+                        <span className="word-item" key={index}>
+                            {word}
+                        </span>
+                    ))}
+                </div>
             </div>
-            <div className="word-list">
-                {words.map((word, index) => (
-                    <span className="word-item" key={index}>
-                        {word}
-                    </span>
-                ))}
-            </div>
+            {loginModal && <LoginPage />}
         </div>
     );
 };
