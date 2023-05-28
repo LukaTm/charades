@@ -1,3 +1,4 @@
+// App.js
 import React, { useEffect, useState } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import LoginPage from "./components/LoginPage";
@@ -11,6 +12,7 @@ const App = () => {
     const [cookies] = useCookies(["token"]);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [rerun, setRerun] = useState(false);
+    const [defaultLang, setDefaultLang] = useState("eng");
 
     const SetTheRerun = () => {
         setRerun(!rerun);
@@ -43,9 +45,12 @@ const App = () => {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     let lang = searchParams.get("lang");
-    console.log(lang);
 
-    const defaultLang = "eng";
+    useEffect(() => {
+        if (lang) {
+            setDefaultLang(lang);
+        }
+    }, [lang]);
 
     return (
         <Routes>
@@ -54,7 +59,10 @@ const App = () => {
                 element={
                     isAuthenticated ? (
                         // replace CAN'T navigate back to previous page
-                        <Navigate to={`/main?lang=${lang}`} replace={true} />
+                        <Navigate
+                            to={`/main?lang=${defaultLang}`}
+                            replace={true}
+                        />
                     ) : (
                         <Navigate to="/login" replace={true} />
                     )
@@ -65,9 +73,12 @@ const App = () => {
                 path="/login"
                 element={
                     isAuthenticated ? (
-                        <Navigate to={`/main?lang=${lang}`} replace={true} />
+                        <Navigate
+                            to={`/main?lang=${defaultLang}`}
+                            replace={true}
+                        />
                     ) : (
-                        <LoginPage rerun={() => SetTheRerun()} />
+                        <LoginPage rerun={SetTheRerun} />
                     )
                 }
             />
@@ -75,7 +86,10 @@ const App = () => {
                 path="/main"
                 element={
                     isAuthenticated ? (
-                        <MainPage rerun={() => SetTheRerun()} />
+                        <MainPage
+                            rerun={SetTheRerun}
+                            defaultLang={defaultLang}
+                        />
                     ) : (
                         <Navigate to="/login" replace={true} />
                     )
@@ -86,7 +100,10 @@ const App = () => {
                 path="/signup"
                 element={
                     isAuthenticated ? (
-                        <Navigate to={`/main?lang=${lang}`} replace={true} />
+                        <Navigate
+                            to={`/main?lang=${defaultLang}`}
+                            replace={true}
+                        />
                     ) : (
                         <SignUpPage />
                     )

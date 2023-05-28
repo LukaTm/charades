@@ -142,18 +142,14 @@ const SignUpPage = ({ rerun }) => {
                 />
                 {passwordHasError && (
                     <p className="error-text">
-                        <div className="eight-characters-error">
-                            Be at least 8 characters<br></br>
-                        </div>
-                        <div className="one-capital-error">
-                            At least one capital letter<br></br>
-                        </div>
-                        <div className="one-number-error">
-                            At least one number<br></br>
-                        </div>
-                        <div className="one-special-character-error">
-                            At least one special character<br></br>
-                        </div>
+                        Be at least 8 characters
+                        <br />
+                        At least one capital letter
+                        <br />
+                        At least one number
+                        <br />
+                        At least one special character
+                        <br />
                     </p>
                 )}
                 {/* <input

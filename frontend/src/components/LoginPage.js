@@ -28,6 +28,10 @@ const LoginPage = ({ rerun }) => {
         }
     };
 
+    const handleContinueWithoutLogin = () => {
+        // Implement logic for continuing without login
+    };
+
     return (
         <div className="login-container">
             <h1 className="login-title">Login</h1>
@@ -58,6 +62,12 @@ const LoginPage = ({ rerun }) => {
                     Sign up
                 </Link>
             </p>
+            <button
+                className="continue-without-login-button"
+                onClick={handleContinueWithoutLogin}
+            >
+                Continue Without Login
+            </button>
         </div>
     );
 };

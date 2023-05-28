@@ -142,7 +142,7 @@ const MainPage = ({ rerun }) => {
                     withCredentials: true, // Include cookies in the request
                 }
             );
-            rerun();
+            rerun(lang);
         } catch (error) {
             console.log(error);
         }
@@ -153,13 +153,13 @@ const MainPage = ({ rerun }) => {
             <header className="header">
                 <div className="h1-container">
                     <h1>
-                        {lang === "eng"
+                        {language === "English"
                             ? "Charades"
-                            : lang === "rus"
+                            : language === "Russian"
                             ? "Шарады"
-                            : language === "lv"
+                            : language === "Latvian"
                             ? "Mēmais šovs"
-                            : null}
+                            : "Charades"}
                     </h1>
                 </div>
 
@@ -196,9 +196,33 @@ const MainPage = ({ rerun }) => {
                         value={category}
                         onChange={handleCategoryChange}
                     >
-                        <option value="Easy">Easy</option>
-                        <option value="Medium">Medium</option>
-                        <option value="Hard">Hard</option>
+                        <option value="Easy">
+                            {language === "English"
+                                ? "Easy"
+                                : language === "Russian"
+                                ? "Легкий"
+                                : language === "Latvian"
+                                ? "Viegla"
+                                : "Easy"}
+                        </option>
+                        <option value="Medium">
+                            {language === "English"
+                                ? "Medium"
+                                : language === "Russian"
+                                ? "Средний"
+                                : language === "Latvian"
+                                ? "Vidēja"
+                                : "Medium"}
+                        </option>
+                        <option value="Hard">
+                            {language === "English"
+                                ? "Hard"
+                                : language === "Russian"
+                                ? "Трудный"
+                                : language === "Latvian"
+                                ? "Grūta"
+                                : "Hard"}
+                        </option>
                     </select>
                 </div>
                 <div className="num-words">
