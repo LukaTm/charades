@@ -10,6 +10,7 @@
     left: 50%;
     height: calc(100vh - 500px) !important;
     transform: translate(-50%, -50%);
+    z-index: 2;
 }
 
 .close-button::before {

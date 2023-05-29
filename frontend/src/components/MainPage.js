@@ -179,9 +179,14 @@ const MainPage = ({
     };
 
     return (
-        <div>
+        <React.Fragment>
             <div
-                className={`main-page ${loginModal ? "modal-background" : ""}`}
+                className={signupModal || loginModal ? "dark-background" : ""}
+            ></div>
+            <div
+                className={`main-page ${
+                    loginModal ? "modal-background darken" : ""
+                }`}
             >
                 <header className="header">
                     <div className="h1-container">
@@ -327,7 +332,7 @@ const MainPage = ({
                     setSignupModal={setSignupModal}
                 />
             )}
-        </div>
+        </React.Fragment>
     );
 };
 

@@ -29,7 +29,7 @@ const LoginPage = ({
                     withCredentials: true, // Include cookies in the request
                 }
             );
-            handleLoginFalse();
+            handleLoginFalse?.();
             localStorage.removeItem("guestAccount");
             rerun();
         } catch (error) {
@@ -49,7 +49,7 @@ const LoginPage = ({
     };
 
     return (
-        <div className={`login-container `}>
+        <div className="login-container">
             <div
                 className={
                     currentURL === "http://localhost:3000/login"
