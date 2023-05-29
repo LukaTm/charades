@@ -168,10 +168,13 @@ const MainPage = ({
     };
     const handleLoginFalse = () => {
         setLoginModal(false);
+        setRemoveGuestUser(false);
     };
-    // const handleSignup = () => {
-    //     setSignupModal(true);
-    // };
+
+    const handleSignup = () => {
+        setSignupModal(true);
+        setRemoveGuestUser(true);
+    };
     const handleSignupFalse = () => {
         setSignupModal(false);
     };
@@ -319,6 +322,7 @@ const MainPage = ({
                     setSignupModalHelper={setSignupModalHelper}
                     setSignupModal={setSignupModal}
                     setLoginModal={setLoginModal}
+                    setRemoveGuestUser={setRemoveGuestUser}
                 />
             )}
             {signupModal && (

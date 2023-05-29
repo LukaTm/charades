@@ -36,15 +36,6 @@ const App = () => {
             localStorage.setItem("guestAccount", JSON.stringify(true));
             setIsLoaded(true);
             console.log("me");
-            // navigate(`/main?lang=${defaultLang}`);
-        }
-    }, [isLoaded, navigate, defaultLang]);
-    useEffect(() => {
-        if (!isLoaded) {
-            setGuestAccount(true);
-            localStorage.setItem("guestAccount", JSON.stringify(true));
-            setIsLoaded(true);
-            console.log("me");
 
             // pathname INSTEAD of FULL URL
             if (window.location.pathname === "/main") {
@@ -53,12 +44,6 @@ const App = () => {
             }
         }
     }, [isLoaded, navigate, defaultLang]);
-    // useEffect(() => {
-    //     const guesedAccount = localStorage.getItem("guestAccount");
-    //     if (!guesedAccount) {
-    //         setGuestAccount(false);
-    //     }
-    // }, []);
 
     const SetTheRerun = () => {
         setRerun(!rerun);

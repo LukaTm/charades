@@ -10,6 +10,7 @@ const LoginPage = ({
     signupModalHelper,
     setSignupModal,
     setLoginModal,
+    setRemoveGuestUser,
 }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -29,9 +30,12 @@ const LoginPage = ({
                     withCredentials: true, // Include cookies in the request
                 }
             );
-            handleLoginFalse?.();
-            localStorage.removeItem("guestAccount");
-            rerun();
+            if (response.status === 200) {
+                handleLoginFalse?.();
+                localStorage.removeItem("guestAccount");
+                rerun();
+                setRemoveGuestUser(true);
+            }
         } catch (error) {
             // Handle error
             console.log(error);
