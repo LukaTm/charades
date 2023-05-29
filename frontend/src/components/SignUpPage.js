@@ -95,7 +95,7 @@ const SignUpPage = ({
             resetLastName();
             resetEmail();
 
-            navigate("/login"); // Redirect
+            loginModalHelper ? Login() : navigate("/login"); // Redirect
         } catch (error) {
             // Handle error
             console.log(error.response.data);
