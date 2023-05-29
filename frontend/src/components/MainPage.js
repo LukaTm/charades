@@ -165,15 +165,13 @@ const MainPage = ({
     };
     const handleLogin = () => {
         setLoginModal(true);
-        setRemoveGuestUser(true);
     };
     const handleLoginFalse = () => {
         setLoginModal(false);
     };
-    const handleSignup = () => {
-        setSignupModal(true);
-        setRemoveGuestUser(true);
-    };
+    // const handleSignup = () => {
+    //     setSignupModal(true);
+    // };
     const handleSignupFalse = () => {
         setSignupModal(false);
     };

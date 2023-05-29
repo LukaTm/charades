@@ -12,7 +12,7 @@ code {
         monospace;
 }
 
-/* .dark-background::before {
+.dark-background::before {
     content: "";
     height: 100%;
     width: 100%;
@@ -27,4 +27,4 @@ code {
     background-color: rgba(0, 0, 0, 0.5);
     position: absolute;
     z-index: 1;
-} */
+}
