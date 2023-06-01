@@ -35,7 +35,6 @@ const App = () => {
             setGuestAccount(true);
             localStorage.setItem("guestAccount", JSON.stringify(true));
             setIsLoaded(true);
-            console.log("me");
 
             // pathname INSTEAD of FULL URL
             if (window.location.pathname === "/main") {
@@ -57,7 +56,6 @@ const App = () => {
 
     useEffect(() => {
         if (removeGuestUser) {
-            console.log("1");
             localStorage.removeItem("guestAccount");
             // setGuestAccount(false);
             setStatusHelper(false);
@@ -68,12 +66,10 @@ const App = () => {
             currentURL !== "http://localhost:3000/login" &&
             currentURL !== "http://localhost:3000/signup"
         ) {
-            console.log("2");
             navigate(`/main?lang=${defaultLang}`);
         } else {
             // Function to check authentication status with the server
             const checkAuthStatus = async () => {
-                console.log("3");
                 try {
                     const response = await axios.post(
                         "http://localhost:8080/api/isauth",

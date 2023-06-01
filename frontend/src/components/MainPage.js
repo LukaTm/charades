@@ -28,6 +28,11 @@ const MainPage = ({
 
     const isFirstClick = useRef(true); // Ref to track the first click
 
+    const [onlyUseCustomWords, setOnlyUseCustomWords] = useState("");
+    const handleOptionChange = (event) => {
+        setOnlyUseCustomWords(event.target.value);
+    };
+
     // info about the current URL
     const location = useLocation();
     // allows you to manipulate and work with query parameters in a URL
@@ -136,12 +141,44 @@ const MainPage = ({
     };
 
     const handleGenerateClick = async () => {
+        if (onlyUseCustomWords) {
+            try {
+                const response = await axios.get(
+                    `http://localhost:8080/api/get-custom-words`,
+                    {},
+                    {
+                        withCredentials: true, // Include cookies in the request
+                    }
+                );
+                setWords(response.data.charadesWords);
+            } catch (error) {
+                if (error.message === "Unauthorized") {
+                    setLoginModal(true);
+                } else {
+                    console.log(error);
+                }
+            }
+        } else {
+            try {
+                const response = await axios.get(
+                    `http://localhost:8080/api/words?numWords=${numWords}&category=${category}&language=${language}`
+                );
+                setWords(response.data.charadesWords);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    };
+
+    const handleCustomWord = async (event) => {
+        event.preventDefault();
         try {
-            const response = await axios.get(
-                `http://localhost:8080/api/words?numWords=${numWords}&category=${category}&language=${language}`
+            const response = await axios.post(
+                `http://localhost:8080/api/custom-word`,
+                { customWord: event.target.value }
             );
-            setWords(response.data.charadesWords);
         } catch (error) {
+            setLoginModal(true);
             console.log(error);
         }
     };
@@ -218,6 +255,24 @@ const MainPage = ({
                     </div>
                 </header>
                 <div className="controls">
+                    <form>
+                        <label htmlFor="custom-word">
+                            Custom charades word:
+                        </label>
+                        <input
+                            type="text"
+                            id="custom-word"
+                            name="custom-word"
+                            placeholder="Enter your own word"
+                        ></input>
+                        <input
+                            type="submit"
+                            value="Submit"
+                            onClick={handleCustomWord}
+                        ></input>
+                    </form>
+                </div>
+                <div className="controls">
                     <div className="select-drop-down">
                         <select
                             id="language"
@@ -230,6 +285,17 @@ const MainPage = ({
                         </select>
                     </div>
                     <div className="select-drop-down">
+                        <label htmlFor="only-custom-words">
+                            Only use custom words:
+                        </label>
+                        <select
+                            id="only-custom-words"
+                            value={onlyUseCustomWords}
+                            onChange={handleOptionChange}
+                        >
+                            <option value="option1">True</option>
+                            <option value="option2">False</option>
+                        </select>
                         <label htmlFor="category">
                             {language === "English"
                                 ? "Difficulty:"

@@ -97,27 +97,30 @@ const login = async (req, res) => {
     }
 };
 
-// const createNewWord = async (req, res) => {
-//     const enteredName = req.params.enteredName;
-//     const userId = req.userId;
+const customWord = async (req, res) => {
+    const customWord = req.query["custom-word"];
+    const userId = req.userId;
 
-//     try {
-//         const customName = new CustomName({
-//             content: enteredName,
-//             creator: userId,
-//             viewers: userId,
-//         });
+    try {
+        const customName = new CustomName({
+            content: customWord,
+            creator: userId,
+            viewers: userId,
+        });
 
-//         await customName.save();
+        await customName.save();
 
-//         const findUser = await User.findById(userId);
-//         findUser.posts.push(post);
+        const findUser = await User.findById(userId);
+        findUser.posts.push(post);
 
-//         await findUser.save();
-//     } catch (error) {
-//         console.log(error);
-//     }
-// };
+        await findUser.save();
+
+        res.status(201).json({ charadesWords });
+    } catch (error) {
+        console.log(error);
+    }
+};
+const getCustomWords = async (req, res) => {};
 
 // Retrieve the existing array to compare against
 let existingArray = [];
@@ -245,4 +248,6 @@ module.exports = {
     login,
     logout,
     getWords,
+    customWord,
+    getCustomWords,
 };
