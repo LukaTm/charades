@@ -16,9 +16,14 @@ const userSchema = new Schema({
     },
     posts: [
         {
+            content: {
+                type: String,
+            },
             // Defines a required ObjectId reference to a Post model for the creator property.
-            type: Schema.Types.ObjectId,
-            ref: "CustomName",
+            customName: {
+                type: Schema.Types.ObjectId,
+                ref: "CustomName",
+            },
         },
     ],
 });

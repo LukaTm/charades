@@ -12,6 +12,38 @@
     background-color: rgb(180, 209, 224);
     padding: 50px;
     border-radius: 10px;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+.custom-word-container {
+    display: flex;
+    margin-bottom: 20px;
+    background-color: rgb(180, 209, 224);
+    padding: 30px;
+    border-radius: 10px;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+.kaka {
+    display: flex;
+}
+
+.custom-word-error-container {
+    display: flex;
+    flex-direction: column;
+}
+
+#custom-word {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 5px;
+}
+
+#already-exists-error {
+    color: red;
 }
 
 .num-words {
@@ -52,7 +84,8 @@
     margin-right: 20px;
 }
 
-.select-drop-down label {
+.select-drop-down label,
+.custom-word-label {
     margin-right: 10px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 1.2em;
@@ -78,7 +111,8 @@
     border-color: #999;
 }
 
-.generate-btn {
+.generate-btn,
+#custom-word-submit-btn {
     padding: 8px 16px;
     font-size: 16px;
     font-weight: bold;
@@ -89,9 +123,11 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
     margin-left: 15px;
+    align-self: baseline;
 }
 
-.generate-btn:hover {
+.generate-btn:hover,
+#custom-word-submit-btn:hover {
     background-color: #6f64d3;
 }
 

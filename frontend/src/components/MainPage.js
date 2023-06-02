@@ -17,6 +17,9 @@ const MainPage = ({
     const [numWords, setNumWords] = useState(1);
     const [category, setCategory] = useState("Easy");
     const [language, setLanguage] = useState("English");
+    const [customWord, setCustomWord] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+
     const [words, setWords] = useState([]);
     const [loginModal, setLoginModal] = useState(false);
     const [signupModalHelper, setSignupModalHelper] = useState(true);
@@ -28,9 +31,13 @@ const MainPage = ({
 
     const isFirstClick = useRef(true); // Ref to track the first click
 
-    const [onlyUseCustomWords, setOnlyUseCustomWords] = useState("");
+    const [onlyUseCustomWordsValue, setOnlyUseCustomWordsValue] = useState("");
+    const [onlyUseCustomWords, setOnlyUseCustomWords] = useState(false);
     const handleOptionChange = (event) => {
-        setOnlyUseCustomWords(event.target.value);
+        const selectedValue = event.target.value;
+        const newValue = selectedValue === "option1" ? false : true;
+        setOnlyUseCustomWords(newValue);
+        setOnlyUseCustomWordsValue(event.target.value);
     };
 
     // info about the current URL
@@ -140,17 +147,27 @@ const MainPage = ({
         setLanguage(event.target.value);
     };
 
+    const handleInputCustomWordChange = (event) => {
+        setCustomWord(event.target.value);
+    };
+
     const handleGenerateClick = async () => {
+        setErrorMessage("");
         if (onlyUseCustomWords) {
             try {
-                const response = await axios.get(
-                    `http://localhost:8080/api/get-custom-words`,
+                const response = await axios.post(
+                    `http://localhost:8080/api/get-custom-words?numWords=${numWords}`,
                     {},
                     {
                         withCredentials: true, // Include cookies in the request
                     }
                 );
-                setWords(response.data.charadesWords);
+                if (response.data === undefined) {
+                    // ! FOR NOW
+                    setWords(["No words found"]);
+                } else {
+                    setWords(response.data);
+                }
             } catch (error) {
                 if (error.message === "Unauthorized") {
                     setLoginModal(true);
@@ -175,11 +192,26 @@ const MainPage = ({
         try {
             const response = await axios.post(
                 `http://localhost:8080/api/custom-word`,
-                { customWord: event.target.value }
+                { customWord: customWord },
+                {
+                    withCredentials: true, // Include cookies in the request
+                }
             );
+            if (response.status === 201) {
+                setCustomWord("");
+                setErrorMessage("");
+            }
         } catch (error) {
-            setLoginModal(true);
-            console.log(error);
+            if (
+                error.response &&
+                error.response.status === 400 &&
+                error.response.data.exists
+            ) {
+                setErrorMessage("Custom word already exists");
+            } else {
+                setErrorMessage("");
+                setLoginModal(true);
+            }
         }
     };
 
@@ -254,22 +286,35 @@ const MainPage = ({
                         )}
                     </div>
                 </header>
-                <div className="controls">
+                <div className="custom-word-container">
                     <form>
-                        <label htmlFor="custom-word">
-                            Custom charades word:
+                        <label
+                            htmlFor="custom-word"
+                            className="custom-word-label"
+                        >
+                            Create custom charades word:
                         </label>
-                        <input
-                            type="text"
-                            id="custom-word"
-                            name="custom-word"
-                            placeholder="Enter your own word"
-                        ></input>
-                        <input
-                            type="submit"
-                            value="Submit"
-                            onClick={handleCustomWord}
-                        ></input>
+                        <div className="kaka">
+                            <div className="custom-word-error-container">
+                                <input
+                                    type="text"
+                                    id="custom-word"
+                                    name="custom-word"
+                                    placeholder="Enter your own word"
+                                    value={customWord}
+                                    onChange={handleInputCustomWordChange}
+                                ></input>
+                                <span id="already-exists-error">
+                                    {errorMessage}
+                                </span>
+                            </div>
+                            <input
+                                id="custom-word-submit-btn"
+                                type="submit"
+                                value="Submit"
+                                onClick={handleCustomWord}
+                            ></input>
+                        </div>
                     </form>
                 </div>
                 <div className="controls">
@@ -290,11 +335,11 @@ const MainPage = ({
                         </label>
                         <select
                             id="only-custom-words"
-                            value={onlyUseCustomWords}
+                            value={onlyUseCustomWordsValue}
                             onChange={handleOptionChange}
                         >
-                            <option value="option1">True</option>
-                            <option value="option2">False</option>
+                            <option value="option1">False</option>
+                            <option value="option2">True</option>
                         </select>
                         <label htmlFor="category">
                             {language === "English"

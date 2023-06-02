@@ -98,29 +98,70 @@ const login = async (req, res) => {
 };
 
 const customWord = async (req, res) => {
-    const customWord = req.query["custom-word"];
+    const { customWord } = req.body;
     const userId = req.userId;
 
     try {
-        const customName = new CustomName({
-            content: customWord,
-            creator: userId,
-            viewers: userId,
-        });
-
-        await customName.save();
-
         const findUser = await User.findById(userId);
-        findUser.posts.push(post);
 
-        await findUser.save();
+        // Check if the custom word already exists for the user
+        const existingCustomName = findUser.posts.find(
+            (post) => post.content === customWord
+        );
+        if (existingCustomName) {
+            return res.status(400).json({
+                message: "Custom Word already exists for the user",
+                exists: true,
+            });
+        } else {
+            const customName = new CustomName({
+                content: customWord,
+                creator: userId,
+                viewers: userId,
+            });
 
-        res.status(201).json({ charadesWords });
+            await customName.save();
+
+            findUser.posts.push({
+                _id: customName._id,
+                content: customName.content,
+            });
+
+            await findUser.save();
+
+            res.status(201).json({ message: "Success" });
+        }
     } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Failed to create Custom Word" });
+    }
+};
+
+const getCustomWords = async (req, res) => {
+    const numWords = req.query.numWords;
+    const userId = req.userId;
+
+    try {
+        const findUser = await User.findById(userId);
+        const posts = findUser.posts;
+        console.log(posts);
+
+        const randomArray = [];
+        const numberOfTimes = numWords;
+
+        for (let i = 0; i < numberOfTimes; i++) {
+            const randomIndex = Math.floor(Math.random() * posts.length);
+            const randomContent = posts[randomIndex].content;
+            randomArray.push(randomContent);
+        }
+
+        // Send the randomArray as the response
+        res.status(200).json(randomArray);
+    } catch (error) {
+        res.status(500).json({ message: "Failed" });
         console.log(error);
     }
 };
-const getCustomWords = async (req, res) => {};
 
 // Retrieve the existing array to compare against
 let existingArray = [];
@@ -131,6 +172,11 @@ const getWords = async (req, res) => {
     let language = req.query.language;
     const userId = req.userId;
 
+    if (numWords > 50) {
+        return res.status(400).json({
+            message: "Too many words requested",
+        });
+    }
     // Convert to lowercase
     if (category) {
         category = category.toLowerCase();
