@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
-import axios from "axios";
 import "./MainPage.css";
+import axios from "axios";
+import React, { useState, useEffect, useRef } from "react";
 
 import LoginPage from "./LoginPage";
+import SignUpPage from "./SignUpPage";
 
 import { useLocation } from "react-router-dom";
-import SignUpPage from "./SignUpPage";
 
 const MainPage = ({
     rerun,
@@ -40,6 +40,21 @@ const MainPage = ({
         setOnlyUseCustomWords(newValue);
         setOnlyUseCustomWordsValue(event.target.value);
     };
+    useEffect(() => {
+        const params = new URLSearchParams();
+
+        if (language === "English") {
+            params.set("lang", "eng");
+        } else if (language === "Russian") {
+            params.set("lang", "rus");
+        } else if (language === "Latvian") {
+            params.set("lang", "lv");
+        } else {
+            params.set("lang", "eng");
+        }
+
+        window.history.replaceState({}, "", `?${params.toString()}`);
+    }, [language]);
 
     // info about the current URL
     const location = useLocation();
@@ -277,11 +292,23 @@ const MainPage = ({
                                 className="logout-btn"
                                 onClick={handleLogout}
                             >
-                                Logout
+                                {language === "English"
+                                    ? "Logout"
+                                    : language === "Russian"
+                                    ? "Выйти"
+                                    : language === "Latvian"
+                                    ? "Iziet"
+                                    : "Logout"}
                             </button>
                         ) : (
                             <button className="login-btn" onClick={handleLogin}>
-                                Login
+                                {language === "English"
+                                    ? "Login"
+                                    : language === "Russian"
+                                    ? "Войти"
+                                    : language === "Latvian"
+                                    ? "Ieiet"
+                                    : "Login"}
                             </button>
                         )}
                     </div>
@@ -292,15 +319,29 @@ const MainPage = ({
                             htmlFor="custom-word"
                             className="custom-word-label"
                         >
-                            Create custom charades word:
+                            {language === "English"
+                                ? "Create custom charades word:"
+                                : language === "Russian"
+                                ? "Создайте собственное слово шарады:"
+                                : language === "Latvian"
+                                ? "Izveidot savu mēmā šova vārdu:"
+                                : "Create custom charades word:"}
                         </label>
-                        <div className="kaka">
+                        <div className="custom-word-container-inside">
                             <div className="custom-word-error-container">
                                 <input
                                     type="text"
                                     id="custom-word"
                                     name="custom-word"
-                                    placeholder="Enter your own word"
+                                    placeholder={
+                                        language === "English"
+                                            ? "Enter your own word"
+                                            : language === "Russian"
+                                            ? "Введите свое слово"
+                                            : language === "Latvian"
+                                            ? "Ievadiet savu vārdu"
+                                            : "Enter your own word"
+                                    }
                                     value={customWord}
                                     onChange={handleInputCustomWordChange}
                                 ></input>
@@ -311,7 +352,15 @@ const MainPage = ({
                             <input
                                 id="custom-word-submit-btn"
                                 type="submit"
-                                value="Submit"
+                                value={
+                                    language === "English"
+                                        ? "Submit"
+                                        : language === "Russian"
+                                        ? "Подтвердить"
+                                        : language === "Latvian"
+                                        ? "Iesniegt"
+                                        : "Submit"
+                                }
                                 onClick={handleCustomWord}
                             ></input>
                         </div>
@@ -331,15 +380,38 @@ const MainPage = ({
                     </div>
                     <div className="select-drop-down">
                         <label htmlFor="only-custom-words">
-                            Only use custom words:
+                            {language === "English"
+                                ? "Only use custom words:"
+                                : language === "Russian"
+                                ? "Используйте только собственные слова:"
+                                : language === "Latvian"
+                                ? "Izmantot tikai savus izveidotos vārdus:"
+                                : "Only use custom words:"}
                         </label>
                         <select
                             id="only-custom-words"
                             value={onlyUseCustomWordsValue}
                             onChange={handleOptionChange}
                         >
-                            <option value="option1">False</option>
-                            <option value="option2">True</option>
+                            <option value="option1">
+                                {language === "English"
+                                    ? "False"
+                                    : language === "Russian"
+                                    ? "Нет"
+                                    : language === "Latvian"
+                                    ? "Nē"
+                                    : "False"}
+                            </option>
+                            <option value="option2">
+                                {" "}
+                                {language === "English"
+                                    ? "True"
+                                    : language === "Russian"
+                                    ? "Да"
+                                    : language === "Latvian"
+                                    ? "Jā"
+                                    : "True"}
+                            </option>
                         </select>
                         <div>
                             {!onlyUseCustomWords && (
@@ -390,37 +462,45 @@ const MainPage = ({
                             )}
                         </div>
                     </div>
-                    <div className="num-words">
-                        <button
-                            onMouseDown={() => handleMouseDown("-")}
-                            onMouseUp={handleMouseUp}
-                            onMouseLeave={handleMouseUp}
-                            onClick={() => handleNumWordsSingleClick(-1)}
-                        >
-                            -
-                        </button>
-                        <div className="num-words-container">
-                            <span>{numWords}</span>
+                    <div className="num-submit-outer-container">
+                        <div className="num-words">
+                            <button
+                                onMouseDown={() => handleMouseDown("-")}
+                                onMouseUp={handleMouseUp}
+                                onMouseLeave={handleMouseUp}
+                                onClick={() => handleNumWordsSingleClick(-1)}
+                            >
+                                -
+                            </button>
+                            <div className="num-words-container">
+                                <span>{numWords}</span>
+                            </div>
+                            <button
+                                onMouseDown={() => handleMouseDown("+")}
+                                onMouseUp={handleMouseUp}
+                                onClick={() => handleNumWordsSingleClick(1)}
+                                onMouseLeave={handleMouseUp}
+                                onContextMenuCapture={(e) => {
+                                    e.preventDefault();
+                                    return false;
+                                }}
+                            >
+                                +
+                            </button>
                         </div>
                         <button
-                            onMouseDown={() => handleMouseDown("+")}
-                            onMouseUp={handleMouseUp}
-                            onClick={() => handleNumWordsSingleClick(1)}
-                            onMouseLeave={handleMouseUp}
-                            onContextMenuCapture={(e) => {
-                                e.preventDefault();
-                                return false;
-                            }}
+                            className="generate-btn"
+                            onClick={handleGenerateClick}
                         >
-                            +
+                            {language === "English"
+                                ? "Submit"
+                                : language === "Russian"
+                                ? "Подтвердить"
+                                : language === "Latvian"
+                                ? "Iesniegt"
+                                : "Submit"}
                         </button>
                     </div>
-                    <button
-                        className="generate-btn"
-                        onClick={handleGenerateClick}
-                    >
-                        Submit
-                    </button>
                 </div>
                 <div className="word-list">
                     {words.map((word, index) => (

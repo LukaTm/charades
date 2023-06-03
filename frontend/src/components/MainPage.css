@@ -26,7 +26,7 @@
     margin-right: 50px;
 }
 
-.kaka {
+.custom-word-container-inside {
     display: flex;
 }
 
@@ -49,6 +49,10 @@
 .num-words {
     display: flex;
     align-items: center;
+}
+
+.num-submit-outer-container {
+    display: flex;
 }
 
 .num-words button {
@@ -123,6 +127,7 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
     margin-left: 15px;
+    margin-top: 3px;
     align-self: baseline;
 }
 
@@ -218,5 +223,89 @@ h1 {
     .h1-container {
         text-align: center;
         left: -50px;
+    }
+}
+
+@media (max-width: 600px) {
+    .controls,
+    .controls select,
+    .controls .num-words {
+        font-size: 0.8em;
+    }
+    .num-words button {
+        font-size: 20px;
+        width: 5vw;
+        height: 5vw;
+    }
+    .generate-btn {
+        padding: 7px;
+        font-size: 14px;
+    }
+    .num-words span {
+        font-size: 2.2em;
+    }
+}
+
+@media (max-width: 510px) {
+    .controls,
+    .controls select,
+    .controls .num-words {
+        font-size: 0.9em;
+    }
+    .num-words button {
+        font-size: 20px;
+        width: 1.3em;
+        height: 1.3em;
+    }
+}
+@media (max-width: 520px) {
+    .controls {
+        padding: 30px;
+    }
+}
+@media (max-width: 480px) {
+    .controls {
+        width: calc(100vw - 100px);
+    }
+    .num-submit-outer-container {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 383px) {
+    .controls {
+        padding: 26px;
+    }
+    .controls {
+        width: 287px;
+    }
+}
+
+@media (max-width: 370px) {
+    .custom-word-container * {
+        font-size: 0.95em;
+        font-weight: bold;
+    }
+    #custom-word-submit-btn {
+        padding: 5px;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 350px) {
+    .custom-word-container {
+        display: flex;
+        flex-direction: column;
+        width: calc(100vw - 100px);
+    }
+    .custom-word-container-inside {
+        flex-direction: column;
+    }
+    #custom-word-submit-btn {
+        margin: 0;
+        margin-top: 5px;
+    }
+    .controls {
+        width: calc(100vw - 100px);
     }
 }

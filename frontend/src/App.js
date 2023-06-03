@@ -23,18 +23,18 @@ const App = () => {
     const defaultLangRef = useRef("eng");
     const [statusHelper, setStatusHelper] = useState(true);
     let defaultLang = defaultLangRef.current;
-    const [guestAccount, setGuestAccount] = useState(() => {
-        const storedGuestAccount = localStorage.getItem("guestAccount");
-        return storedGuestAccount ? JSON.parse(storedGuestAccount) : false;
-    });
+    const [guestAccount, setGuestAccount] = useState(true);
+    // const [guestAccount, setGuestAccount] = useState(() => {
+    //     const storedGuestAccount = localStorage.getItem("guestAccount");
+    //     return storedGuestAccount ? JSON.parse(storedGuestAccount) : false;
+    // });
 
     const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
         if (!isLoaded) {
-            setGuestAccount(true);
-            localStorage.setItem("guestAccount", JSON.stringify(true));
             setIsLoaded(true);
+            localStorage.setItem("guestAccount", JSON.stringify(true));
 
             // pathname INSTEAD of FULL URL
             if (window.location.pathname === "/main") {
@@ -54,6 +54,7 @@ const App = () => {
     };
     const currentURL = window.location.href;
 
+    console.log(guestAccount);
     useEffect(() => {
         if (removeGuestUser) {
             localStorage.removeItem("guestAccount");
