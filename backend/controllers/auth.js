@@ -77,7 +77,7 @@ const login = async (req, res) => {
             { userId: user._id.toString() },
             "your-secret-key",
             {
-                expiresIn: "1h",
+                expiresIn: "30d",
             }
         );
 
@@ -137,22 +137,46 @@ const customWord = async (req, res) => {
     }
 };
 
+//! USE DATABASE
+let customExistingArray = [];
+
 const getCustomWords = async (req, res) => {
     const numWords = req.query.numWords;
     const userId = req.userId;
+    let repeatWords = false;
 
     try {
         const findUser = await User.findById(userId);
         const posts = findUser.posts;
-        console.log(posts);
+
+        let filteredPosts;
+        if (!repeatWords || customExistingArray.length === 0) {
+            // Filter Duplicates if repeatWords is false or customExistingArray is empty
+            filteredPosts = posts.filter(
+                (value) => !customExistingArray.includes(value.content)
+            );
+        } else {
+            // Use all posts if repeatWords is true and customExistingArray is not empty
+            filteredPosts = posts;
+        }
+
+        let postsCopy = [];
+        filteredPosts.forEach((element) => {
+            postsCopy.push(element.content);
+        });
 
         const randomArray = [];
-        const numberOfTimes = numWords;
+        const numberOfTimes = Math.min(numWords, postsCopy.length);
 
         for (let i = 0; i < numberOfTimes; i++) {
-            const randomIndex = Math.floor(Math.random() * posts.length);
-            const randomContent = posts[randomIndex].content;
+            const randomIndex = Math.floor(Math.random() * postsCopy.length);
+            const randomContent = postsCopy.splice(randomIndex, 1)[0];
             randomArray.push(randomContent);
+            customExistingArray.push(randomContent);
+        }
+
+        if (postsCopy.length === 0) {
+            customExistingArray = []; // Reset customExistingArray when all words have been used
         }
 
         // Send the randomArray as the response
@@ -163,6 +187,7 @@ const getCustomWords = async (req, res) => {
     }
 };
 
+//! USE DATABASE
 // Retrieve the existing array to compare against
 let existingArray = [];
 

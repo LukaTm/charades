@@ -19,6 +19,7 @@ const MainPage = ({
     const [language, setLanguage] = useState("English");
     const [customWord, setCustomWord] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    const [numberOfWords, setNumberOfWords] = useState(0);
 
     const [words, setWords] = useState([]);
     const [loginModal, setLoginModal] = useState(false);
@@ -61,6 +62,10 @@ const MainPage = ({
                 setLanguage("English");
         }
     }, [lang]);
+
+    useEffect(() => {
+        setNumberOfWords(words.length);
+    }, [words]);
 
     useEffect(() => {
         let timeoutId;
@@ -169,7 +174,7 @@ const MainPage = ({
                     setWords(response.data);
                 }
             } catch (error) {
-                if (error.message === "Unauthorized") {
+                if (!error.response.data.notAuth) {
                     setLoginModal(true);
                 } else {
                     console.log(error);
@@ -224,7 +229,6 @@ const MainPage = ({
                     withCredentials: true, // Include cookies in the request
                 }
             );
-            // rerun(lang);
             setIsAuthenticated(false);
             localStorage.setItem("guestAccount", JSON.stringify(true));
             rerun();
@@ -240,10 +244,6 @@ const MainPage = ({
         setRemoveGuestUser(false);
     };
 
-    const handleSignup = () => {
-        setSignupModal(true);
-        setRemoveGuestUser(true);
-    };
     const handleSignupFalse = () => {
         setSignupModal(false);
     };
@@ -341,48 +341,54 @@ const MainPage = ({
                             <option value="option1">False</option>
                             <option value="option2">True</option>
                         </select>
-                        <label htmlFor="category">
-                            {language === "English"
-                                ? "Difficulty:"
-                                : language === "Russian"
-                                ? "Сложность:"
-                                : language === "Latvian"
-                                ? "Grūtība:"
-                                : null}
-                        </label>
-                        <select
-                            id="category"
-                            value={category}
-                            onChange={handleCategoryChange}
-                        >
-                            <option value="Easy">
-                                {language === "English"
-                                    ? "Easy"
-                                    : language === "Russian"
-                                    ? "Легкий"
-                                    : language === "Latvian"
-                                    ? "Viegla"
-                                    : "Easy"}
-                            </option>
-                            <option value="Medium">
-                                {language === "English"
-                                    ? "Medium"
-                                    : language === "Russian"
-                                    ? "Средний"
-                                    : language === "Latvian"
-                                    ? "Vidēja"
-                                    : "Medium"}
-                            </option>
-                            <option value="Hard">
-                                {language === "English"
-                                    ? "Hard"
-                                    : language === "Russian"
-                                    ? "Трудный"
-                                    : language === "Latvian"
-                                    ? "Grūta"
-                                    : "Hard"}
-                            </option>
-                        </select>
+                        <div>
+                            {!onlyUseCustomWords && (
+                                <>
+                                    <label htmlFor="category">
+                                        {language === "English"
+                                            ? "Difficulty:"
+                                            : language === "Russian"
+                                            ? "Сложность:"
+                                            : language === "Latvian"
+                                            ? "Grūtība:"
+                                            : null}
+                                    </label>
+                                    <select
+                                        id="category"
+                                        value={category}
+                                        onChange={handleCategoryChange}
+                                    >
+                                        <option value="Easy">
+                                            {language === "English"
+                                                ? "Easy"
+                                                : language === "Russian"
+                                                ? "Легкий"
+                                                : language === "Latvian"
+                                                ? "Viegla"
+                                                : "Easy"}
+                                        </option>
+                                        <option value="Medium">
+                                            {language === "English"
+                                                ? "Medium"
+                                                : language === "Russian"
+                                                ? "Средний"
+                                                : language === "Latvian"
+                                                ? "Vidēja"
+                                                : "Medium"}
+                                        </option>
+                                        <option value="Hard">
+                                            {language === "English"
+                                                ? "Hard"
+                                                : language === "Russian"
+                                                ? "Трудный"
+                                                : language === "Latvian"
+                                                ? "Grūta"
+                                                : "Hard"}
+                                        </option>
+                                    </select>
+                                </>
+                            )}
+                        </div>
                     </div>
                     <div className="num-words">
                         <button
@@ -418,7 +424,18 @@ const MainPage = ({
                 </div>
                 <div className="word-list">
                     {words.map((word, index) => (
-                        <span className="word-item" key={index}>
+                        <span
+                            className={`word-item ${
+                                numberOfWords <= 5 && numberOfWords > 2
+                                    ? "five-words-size"
+                                    : numberOfWords <= 20 && numberOfWords > 5
+                                    ? "ten-words-size"
+                                    : numberOfWords <= 2
+                                    ? "one-words-size"
+                                    : ""
+                            }`}
+                            key={index}
+                        >
                             {word}
                         </span>
                     ))}

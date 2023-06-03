@@ -22,7 +22,7 @@ const SignUpPage = ({
     };
     const isPassword = (value) => {
         // Minimum length requirement
-        if (value.length < 8) {
+        if (value.length < 6) {
             return false; // Password is too short
         }
 
@@ -30,18 +30,18 @@ const SignUpPage = ({
             return false; // Password is too long
         }
 
-        // use test for checking if value includes specific pattern
-        if (!/[A-Z]/.test(value)) {
-            return false; // Password does not contain an uppercase letter
-        }
-        // At least one number requirement
-        if (!/\d/.test(value)) {
-            return false; // Password does not contain a number
-        }
+        // // use test for checking if value includes specific pattern
+        // if (!/[A-Z]/.test(value)) {
+        //     return false; // Password does not contain an uppercase letter
+        // }
+        // // At least one number requirement
+        // if (!/\d/.test(value)) {
+        //     return false; // Password does not contain a number
+        // }
 
-        if (!/[!@#$%^&*]/.test(value)) {
-            return false; // Password does not contain a special character
-        }
+        // if (!/[!@#$%^&*]/.test(value)) {
+        //     return false; // Password does not contain a special character
+        // }
 
         return true;
     };
@@ -162,14 +162,14 @@ const SignUpPage = ({
                 />
                 {passwordHasError && (
                     <p className="error-text">
-                        Be at least 8 characters
-                        <br />
+                        Be at least 6 characters
+                        {/* <br />
                         At least one capital letter
                         <br />
                         At least one number
                         <br />
                         At least one special character
-                        <br />
+                        <br /> */}
                     </p>
                 )}
                 {/* <input
