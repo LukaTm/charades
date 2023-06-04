@@ -30,19 +30,6 @@ const SignUpPage = ({
             return false; // Password is too long
         }
 
-        // // use test for checking if value includes specific pattern
-        // if (!/[A-Z]/.test(value)) {
-        //     return false; // Password does not contain an uppercase letter
-        // }
-        // // At least one number requirement
-        // if (!/\d/.test(value)) {
-        //     return false; // Password does not contain a number
-        // }
-
-        // if (!/[!@#$%^&*]/.test(value)) {
-        //     return false; // Password does not contain a special character
-        // }
-
         return true;
     };
 
@@ -161,25 +148,8 @@ const SignUpPage = ({
                     className={passwordClasses}
                 />
                 {passwordHasError && (
-                    <p className="error-text">
-                        Be at least 6 characters
-                        {/* <br />
-                        At least one capital letter
-                        <br />
-                        At least one number
-                        <br />
-                        At least one special character
-                        <br /> */}
-                    </p>
+                    <p className="error-text">Be at least 6 characters</p>
                 )}
-                {/* <input
-                    type="password"
-                    placeholder="Confirm Password"
-                    value={passwordClasses}
-                    onChange={passwordChangeHandler}
-                    onBlur={passwordBlurHandler}
-                    className={passwordClasses}
-                /> */}
                 <button type="submit" className="login-button">
                     Sign Up
                 </button>
